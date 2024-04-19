@@ -6,18 +6,23 @@ import Cookies from 'js-cookie'
 import './index.css'
 
 class LoginForm extends Component {
-  state = {userName: '', password: '', showSubmitError: false, errorMsg: ''}
+  state = {
+    usernameInput: '',
+    passwordInput: '',
+    showSubmitError: false,
+    errorMsg: '',
+  }
 
-  onChangeUsersname = event => {
-    this.setState({userName: event.target.value})
+  onChangeUsername = event => {
+    this.setState({usernameInput: event.target.value})
   }
 
   onChangePassword = event => {
-    this.setState({password: event.target.value})
+    this.setState({passwordInput: event.target.value})
   }
 
   renderPasswordField = () => {
-    const {password} = this.state
+    const {passwordInput} = this.state
     return (
       <>
         <label className="input-label" htmlFor="password">
@@ -27,7 +32,7 @@ class LoginForm extends Component {
           type="password"
           id="password"
           className="input-field"
-          value={password}
+          value={passwordInput}
           onChange={this.onChangePassword}
         />
       </>
@@ -35,7 +40,7 @@ class LoginForm extends Component {
   }
 
   renderUsernameField = () => {
-    const {username} = this.state
+    const {usernameInput} = this.state
     return (
       <>
         <label className="input-label" htmlFor="username">
@@ -45,7 +50,7 @@ class LoginForm extends Component {
           type="text"
           id="username"
           className="input-field"
-          value={username}
+          value={usernameInput}
           onChange={this.onChangeUsername}
         />
       </>
@@ -53,7 +58,7 @@ class LoginForm extends Component {
   }
 
   onSubmitSuccess = jwtToken => {
-    Cookies.set(jwtToken, 'jwt_token', {expires: 30})
+    Cookies.set('jwt_token', jwtToken, {expires: 30})
     const {history} = this.props
     history.replace('/')
   }
@@ -65,8 +70,8 @@ class LoginForm extends Component {
 
   submitForm = async event => {
     event.preventDefault()
-    const {userName, password} = this.state
-    const userDetails = {userName, password}
+    const {usernameInput, passwordInput} = this.state
+    const userDetails = {username: usernameInput, password: passwordInput}
     const url = 'https://apis.ccbp.in/login'
     const options = {
       method: 'POST',
@@ -86,7 +91,7 @@ class LoginForm extends Component {
 
     const jwtToken = Cookies.get('jwt_token')
     if (jwtToken !== undefined) {
-      ;<Redirect to="/" />
+      return <Redirect to="/" />
     }
     return (
       <div className="bg-container">
